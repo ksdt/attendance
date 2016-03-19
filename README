@@ -1,0 +1,9 @@
+# attendance
+
+Automatically generates an attendance grid for a given spinitron station.
+
+To use, edit `index.js` and replace occurances of 'ksdt' with your own station ID. Then, run with `node index.js`.
+
+You should have your spinpapi credentials in `process.env.SPIN_USER` and `process.env.SPIN_SECRET`. You can also set a port to listen on through `process.env.PORT`. The default port is 3000.
+
+This works really well on Heroku's free tier. 

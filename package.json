@@ -1,14 +1,14 @@
 {
   "name": "attendance",
   "version": "1.0.0",
-  "description": "",
+  "description": "an automatic attendance grid for spinitron users",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Tennyson Holloway",
+  "license": "MIT",
   "dependencies": {
     "express": "^4.13.4",
     "moment": "^2.12.0",
