@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Attendance</title>
+    <link rel="stylesheet" href="./pure-min.css">
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <table class="pure-table pure-table-striped">
+        <thead>
+            <tr>
+                <th class="showname" >Show Name</th>
+                {{ #weekns }}
+                <th class="week-title"> {{ weekstr }} </th>
+                {{ /weekns }}
+            </tr>
+        </thead>
+        <tbody>
+            {{ #shows }}
+                <tr>
+                    <th class="showname"> {{ ShowName }} </th>
+                    {{ #weeks }}
+                        <th class="wk {{ here }}"><a href="{{ link }}">playlist</a></th>
+                    {{ /weeks }}
+                </tr>
+            {{ /shows }}
+    </table> 
+</body>
+</html>

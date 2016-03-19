@@ -1,0 +1,43 @@
+.here {
+    background-color: green !important;
+}
+
+.wk {
+    background-color: red;
+}
+
+.showname {
+    max-width: 100px;
+    min-width: 100px;
+}
+
+.week-title, .wk {
+    max-width: 50px;
+    min-width: 50px;
+}
+
+th a {
+    display: none;
+}
+
+th.here a {
+    display: block;
+    color: white;
+}
+tbody {
+    top: 100px;
+    position: absolute;
+}
+
+tbody tr {
+    opacity: 0.7;
+}
+
+tr:hover {
+    opacity: 1;
+}
+
+thead {
+    position: fixed; 
+    z-index: 10;
+}
