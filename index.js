@@ -56,51 +56,56 @@ app.get('/', function (req, res) {
 
         var shows = resp.results;
 
-        /* helper to get past 99 playlists from a show */
-        function getPlaylistsForShow(show) {
-            return new Promise(function (resolve, reject) {
-                spinitron.getPlaylistsInfo( { ShowID: show['ShowID'], Num : 99 }, function (err, resp) {
-                    if (err) reject(err);
-                    else resolve(resp.results ? resp.results : []);
-                });
-            });
-        }
-
-        var playlistsPromises = [];
-
-        /* get all the playlists for each show */
-        shows.forEach(function (show) {
-            show.weeks = new Array(weeks.length);
-            for (var i = 0; i < weeks.length; i++)
-                show.weeks[i] = {};
-            playlistsPromises.push(new Promise(function (resolve, reject) {
-                getPlaylistsForShow(show).then(function(playlists) {
-                    show.playlists = playlists && playlists.length ? playlists : [];
-                }).then(resolve).catch(reject);
-            }));
-        });
-
-        /* for each show, go through the list of weeks. for each week, check if one of the show's playlists was within that week.
-         * if so, then mark the week down in the show's week object. */
-        Promise.all(playlistsPromises).then(function() {
-            shows.forEach(function (show) {
-                show.weeks.forEach(function (week, i) {
-                    show.playlists.forEach(function (playlist) {
-                        if (moment(playlist['PlaylistDate']).isBetween(weeks[i].start, moment(weeks[i].start).add(1, 'week'))) {
-                            week.here = 'here';
-                            week.link = 'https://spinitron.com/radio/playlist.php?station=ksdt&playlist='+playlist['PlaylistID'];
-                        }
+        try {
+            /* helper to get past 99 playlists from a show */
+            function getPlaylistsForShow(show) {
+                return new Promise(function (resolve, reject) {
+                    spinitron.getPlaylistsInfo( { ShowID: show['ShowID'], Num : 99 }, function (err, resp) {
+                        if (err) reject(err);
+                        else resolve(resp.results ? resp.results : []);
                     });
-                }); 
+                });
+            }
+
+            var playlistsPromises = [];
+
+            /* get all the playlists for each show */
+            shows.forEach(function (show) {
+                show.weeks = new Array(weeks.length);
+                for (var i = 0; i < weeks.length; i++)
+                    show.weeks[i] = {};
+                playlistsPromises.push(new Promise(function (resolve, reject) {
+                    getPlaylistsForShow(show).then(function(playlists) {
+                        show.playlists = playlists && playlists.length ? playlists : [];
+                    }).then(resolve).catch(reject);
+                }));
             });
-        }).then(function() { /* then cache and render the result */
-            cachedRender = mustache.render(grid, { weekns: weeks, shows: shows });
-            cacheTime = moment();
-            res.send(cachedRender);
-        }).catch(function(err) {
-            console.log(err);
-            res.send('sorry, there was an error.');
-        });
+
+            /* for each show, go through the list of weeks. for each week, check if one of the show's playlists was within that week.
+             * if so, then mark the week down in the show's week object. */
+            Promise.all(playlistsPromises).then(function() {
+                shows.forEach(function (show) {
+                    show.weeks.forEach(function (week, i) {
+                        show.playlists.forEach(function (playlist) {
+                            if (moment(playlist['PlaylistDate']).isBetween(weeks[i].start, moment(weeks[i].start).add(1, 'week'))) {
+                                week.here = 'here';
+                                week.link = 'https://spinitron.com/radio/playlist.php?station=ksdt&playlist='+playlist['PlaylistID'];
+                            }
+                        });
+                    }); 
+                });
+            }).then(function() { /* then cache and render the result */
+                cachedRender = mustache.render(grid, { weekns: weeks, shows: shows });
+                cacheTime = moment();
+                res.send(cachedRender);
+            }).catch(function(err) {
+                console.log(err);
+                res.send('sorry, there was an error.');
+            });
+        } catch (e) {
+            res.send("Sorry, there was an error processing your request. Please send a message to dj web");
+            console.log(e);
+        }
     });
 });
 
