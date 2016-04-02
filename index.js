@@ -56,7 +56,7 @@ app.get('/', function (req, res) {
 
         var shows = resp.results;
 
-        console.log(resp);
+        var shows = Object.keys(shows).map(function (k) { return shows[k] });
 
         try {
             /* helper to get past 99 playlists from a show */
