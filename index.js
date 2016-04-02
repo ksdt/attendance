@@ -56,6 +56,8 @@ app.get('/', function (req, res) {
 
         var shows = resp.results;
 
+        console.log(resp);
+
         try {
             /* helper to get past 99 playlists from a show */
             function getPlaylistsForShow(show) {
