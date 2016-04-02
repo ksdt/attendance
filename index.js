@@ -56,7 +56,9 @@ app.get('/', function (req, res) {
 
         var shows = resp.results;
 
-        console.log(shows);
+        console.log("RESP: ", resp);
+
+        console.log("RESP.RESULTS: ", resp.results);
 
         //var shows = Object.keys(shows).map(function (k) { return shows[k] });
 
