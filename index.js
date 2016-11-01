@@ -37,14 +37,14 @@ app.get('/', function (req, res) {
 
     weeks.push({ start: moment(beginningOfThisWeek)} );
 
-    for (var i = 0; i < NUM_WEEKS; i++) { 
+    for (var i = 0; i < NUM_WEEKS; i++) {
         /* go back a week, then add that date to the list */
         weeks.push({ start: moment(beginningOfThisWeek.subtract(1, 'week')) });
     }
 
     /* generate a nice string for the grid display */
     weeks.forEach(function (week, i) {
-        weeks[i].weekstr = 
+        weeks[i].weekstr =
             "Week of " + week.start.format('MMM D');
     });
 
@@ -69,6 +69,16 @@ app.get('/', function (req, res) {
 
             var playlistsPromises = [];
 
+            console.log(shows);
+
+            var showsArr = [];
+            for (var k in shows) {
+                if (shows.hasOwnProperty(k)) {
+                    showsArr.push(shows[k])
+                }
+            }
+            shows = showsArr;
+
             /* get all the playlists for each show */
             shows.forEach(function (show) {
                 show.weeks = new Array(weeks.length);
@@ -92,7 +102,7 @@ app.get('/', function (req, res) {
                                 week.link = 'https://spinitron.com/radio/playlist.php?station=ksdt&playlist='+playlist['PlaylistID'];
                             }
                         });
-                    }); 
+                    });
                 });
             }).then(function() { /* then cache and render the result */
                 cachedRender = mustache.render(grid, { weekns: weeks, shows: shows });
